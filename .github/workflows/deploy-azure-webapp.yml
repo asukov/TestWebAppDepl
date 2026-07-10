@@ -18,6 +18,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.14'
+          check-latest: true        # Forces the runner to fetch it online if missing[...](asc_slot://start-slot-10)
+          allow-prereleases: true   # Helpful if targeting specific pre-release builds
 
       - name: Install dependencies
         run: |
