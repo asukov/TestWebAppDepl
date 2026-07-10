@@ -59,4 +59,19 @@ def home():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM
+        cursor.execute("SELECT * FROM users;")
+        users = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        
+        return render_template_string(HTML_TEMPLATE, users=users)
+    except Exception as e:
+        return f"<h3>Database Connection Failed:</h3><p>{str(e)}</p>", 500
+
+@app.route("/health")
+def health_check():
+    return {"status": "healthy", "version": sys.version}
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)
