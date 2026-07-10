@@ -1,12 +1,41 @@
-from flask import Flask
+from flask import Flask, jsonify
+import mysql.connector
+import os
 import sys
 
 app = Flask(__name__)
 
+def get_db_connection():
+    # It is highly recommended to store the password in Azure App Settings
+    # rather than hardcoding it in your repository.
+    db_password = os.environ.get("DB_PASSWORD", "YOUR_DEFAULT_PASSWORD_HERE")
+    
+    return mysql.connector.connect(
+        host="asukov-mysql.mysql.database.azure.com",
+        port=3306,
+        user="asukov",
+        password=db_password,
+        database="users"
+    )
+
 @app.route("/")
 def home():
-    python_version = sys.version
-    return f"Hello from Azure Web Apps! Running on Python version: {python_version}"
+    return "Hello from Azure! Navigate to /users to see the database records."
+
+@app.route("/users")
+def get_users():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users;")
+        users = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        
+        return jsonify(users)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/health")
 def health_check():
