@@ -15,7 +15,8 @@ def get_db_connection():
         port=3306,
         user="asukov",
         password=db_password,
-        database="users"
+        database="users",
+        ssl_disabled=True
     )
 
 @app.route("/")
