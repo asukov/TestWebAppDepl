@@ -11,7 +11,7 @@ def get_db_connection():
     db_password = os.environ.get("DB_PASSWORD", "YOUR_DEFAULT_PASSWORD_HERE")
     
     return mysql.connector.connect(
-        host="asukov-mysql.mysql.database.azure.com",
+        host="10.0.0.4",
         port=3306,
         user="asukov",
         password=db_password,
